@@ -1,14 +1,18 @@
 package junit;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+
 import core.EvercraftCharacter;
 
 public class TestHelper {
-	
+
 	public static EvercraftCharacter createDefaultCharacter() {
 		String defaultName = "Hasselhoff";
-		return createCharacterWithName(defaultName); 
+		return createCharacterWithName(defaultName);
 	}
-	
+
 	public static EvercraftCharacter createCharacterWithName(String name) {
 		return new EvercraftCharacter(name);
 	}
@@ -18,7 +22,7 @@ public class TestHelper {
 		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
 		return enemyCharacter.attackedBy(myCharacter, roll);
 	}
-	
+
 	public static boolean combatSimulatorStrAndRoll(int strength, int roll) {
 		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
 		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
