@@ -32,7 +32,11 @@ public class EvercraftCharacter {
 	 */
 	public boolean attackedBy(EvercraftCharacter attackingCharacter, int roll) {
 		int rollWithMods = roll + attackingCharacter.getStrengthModifier();
-		if (isHitBy(rollWithMods)) {
+		return attackedBy(rollWithMods);
+	}
+	
+	public boolean attackedBy(int roll) {
+		if (isHitBy(roll)) {
 			dealDamageWithRoll(roll);
 			return true;
 		} else {
@@ -46,22 +50,21 @@ public class EvercraftCharacter {
 	
 	private void dealDamageWithRoll(int roll) {
 		if (CRITICAL_ROLL == roll) {
-			hitPoints = hitPoints - (2 * baseDamage);
+			hitPoints = hitPoints - attackDamageOnCrits();
 		} else {
-			hitPoints = hitPoints - (baseDamage);
+			hitPoints = hitPoints - attackDamage();
 		}
-	}
-	
-	
-	public boolean attackedByRoll(int roll) {
-		return attackedBy(new EvercraftCharacter("Foo"), roll);
 	}
 	
 	public int getStrengthModifier() {
 		return ScoreModifiers.getModifier(strength);
 	}
 
-	public int attackDamageBonus() {
+	public int attackDamageOnCrits() {
+		return (2 * attackDamage());
+	}
+	
+	public int attackDamage() {
 		int calculatedDamage = baseDamage
 				+ getStrengthModifier();
 		if (calculatedDamage < MINIMUM_DAMAGE) {

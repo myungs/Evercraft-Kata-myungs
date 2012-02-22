@@ -145,13 +145,12 @@ public class TestCombat {
 	public void Strength20Roll1Misses() {
 		assertEquals(MISS, TestHelper.combatSimulatorStrAndRoll(20,1));
 	}
-
 	
 	//Takes Damage
 	@Test
 	public void testCharacterTakes1DamageWhenHit() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
-		character.attackedByRoll(10);
+		character.attackedBy(10);
 		int expectedHitPoints =  4;
 		assertEquals(expectedHitPoints, character.getHitPoints());
 	}
@@ -159,7 +158,7 @@ public class TestCombat {
 	@Test
 	public void testCharacterTakesDoubleDamageWhenHitWithCriticalRollOf20() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
-		character.attackedByRoll(20);
+		character.attackedBy(20);
 		int expectedHitPoints =  3;
 		assertEquals(expectedHitPoints, character.getHitPoints());
 	}
