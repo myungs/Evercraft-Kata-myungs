@@ -1,6 +1,5 @@
 package core;
 
-
 public class EvercraftCharacter {
 
 	private static final int MINIMUM_DAMAGE = 1;

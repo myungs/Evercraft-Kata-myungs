@@ -1,7 +1,7 @@
 package core;
 
 public class ScoreModifiers {
-
+	
 	public static int getAttribute(int desiredModifier) {
 		return (desiredModifier + 4)*2;
 	}
