@@ -21,7 +21,7 @@ public class TestCharacter {
 	@Test
 	public void testCanChangeCharacterName() {
 		String oldName = "Bruce Wayne";
-		String newName = "Batmane";
+		String newName = "Batman";
 		EvercraftCharacter character = new EvercraftCharacter(oldName);
 		character.setName(newName);
 		assertEquals(newName, character.getName());
@@ -74,6 +74,13 @@ public class TestCharacter {
 	public void testCharacterIsDeadWhenHitPointsIsZero() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setHitPoints(0);
+		assertTrue(character.isDead());
+	}
+	
+	@Test
+	public void testCharacterIsDeadWhenHitPointsIsLessThanZero() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		character.setHitPoints(-1);
 		assertTrue(character.isDead());
 	}
 	
@@ -134,68 +141,61 @@ public class TestCharacter {
 	}
 	
 	//Attack Damage Calculations
+	
 	@Test
 	public void testStrength11AddsToAttackDamageBasedOnModifier() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setStrength(11);
-		int expectedDamage = 1;
-		assertEquals(expectedDamage, character.attackDamageBonus());
+		assertEquals(1, character.attackDamageBonus());
 	}
 	
 	@Test
 	public void testStrength12AddsToAttackDamageBasedOnModifier() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setStrength(12);
-		int expectedDamage = 2;
-		assertEquals(expectedDamage, character.attackDamageBonus());
+		assertEquals(2, character.attackDamageBonus());
 	}
 	
 	@Test
 	public void testStrength14AddsFromAttackDamageBasedOnModifier() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setStrength(14);
-		int expectedDamage = 3;
-		assertEquals(expectedDamage, character.attackDamageBonus());
+		assertEquals(3, character.attackDamageBonus());
 	}
 	
 	@Test
 	public void testStrength19AddsFromAttackDamageBasedOnModifier() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setStrength(19);
-		int expectedDamage = 5;
-		assertEquals(expectedDamage, character.attackDamageBonus());
+		assertEquals(5, character.attackDamageBonus());
 	}
 	
 	@Test
 	public void testStrength9SubtractsToAttackDamageBasedOnModifierMinimumDamageOf1() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setStrength(9);
-		int expectedDamage = 1;
-		assertEquals(expectedDamage, character.attackDamageBonus());
+		assertEquals(1, character.attackDamageBonus());
 	}
 	
 	@Test
 	public void testStrength8SubtractsFromAttackDamageBasedOnModifierMinimumDamageOf1() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setStrength(8);
-		int expectedDamage = 1;
-		assertEquals(expectedDamage, character.attackDamageBonus());
+		assertEquals(1, character.attackDamageBonus());
 	}
 	
 	@Test
 	public void testStrength7SubtractsFromAttackDamageBasedOnModifierMinimumDamageOf1() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setStrength(7);
-		int expectedDamage = 1;
-		assertEquals(expectedDamage, character.attackDamageBonus());
+		assertEquals(1, character.attackDamageBonus());
 	}
 	
 	@Test
 	public void testStrength1SubtractsFromAttackDamageBasedOnModifierMinimumDamageOf1() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setStrength(1);
-		int expectedDamage = 1;
-		assertEquals(expectedDamage, character.attackDamageBonus());
+		assertEquals(1, character.attackDamageBonus());
 	}
 	
 	//Critical Rolls on Attack Damage
