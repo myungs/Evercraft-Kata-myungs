@@ -341,7 +341,7 @@ public class TestCharacter {
 	public void testCharacterGains10XPOnSuccessfullAttack() {
 		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
 		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
-		enemyCharacter.attackedBy(myCharacter, 10);
+		myCharacter.attack(myCharacter, 10);
 		assertEquals(10, myCharacter.getExperience());
 	}
 
@@ -350,7 +350,7 @@ public class TestCharacter {
 		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
 		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
 		myCharacter.setExperience(990);
-		enemyCharacter.attackedBy(myCharacter, 10);
+		myCharacter.attack(myCharacter, 10);
 		assertEquals(2, myCharacter.getLevel());
 	}
 
@@ -359,7 +359,7 @@ public class TestCharacter {
 		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
 		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
 		myCharacter.setExperience(1000);
-		enemyCharacter.attackedBy(myCharacter, 10);
+		myCharacter.attack(myCharacter, 10);
 		assertEquals(2, myCharacter.getLevel());
 	}
 	

@@ -16,7 +16,7 @@ public class TestCombat {
 		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
 		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
 		int roll = 10;
-		assertTrue(myCharacter.attackedBy(enemyCharacter, roll));
+		assertTrue(myCharacter.attack(enemyCharacter, roll));
 	}
 	
 	// Rolling hits vs AC
@@ -151,17 +151,15 @@ public class TestCombat {
 	public void testCharacterTakes1DamageWhenHit() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
-		character.attackedBy(enemyCharacter, 10);
-		int expectedHitPoints =  4;
-		assertEquals(expectedHitPoints, character.getCurrentHitPoints());
+		character.attack(enemyCharacter, 10);
+		assertEquals(4, enemyCharacter.getCurrentHitPoints());
 	}
 	
 	@Test
 	public void testCharacterTakesDoubleDamageWhenHitWithCriticalRollOf20() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
-		character.attackedBy(enemyCharacter, 20);
-		int expectedHitPoints =  3;
-		assertEquals(expectedHitPoints, character.getCurrentHitPoints());
+		character.attack(enemyCharacter, 20);
+		assertEquals(3, enemyCharacter.getCurrentHitPoints());
 	}
 }

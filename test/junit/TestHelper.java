@@ -16,13 +16,13 @@ public class TestHelper {
 	public static boolean combatSimulatorRoll(int roll) {
 		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
 		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
-		return enemyCharacter.attackedBy(myCharacter, roll);
+		return myCharacter.attack(myCharacter, roll);
 	}
 
 	public static boolean combatSimulatorStrAndRoll(int strength, int roll) {
 		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
 		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
-		enemyCharacter.setStrength(strength);
-		return myCharacter.attackedBy(enemyCharacter, roll);
+		myCharacter.setStrength(strength);
+		return myCharacter.attack(enemyCharacter, roll);
 	}
 }

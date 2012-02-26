@@ -34,11 +34,11 @@ public class EvercraftCharacter {
 	/*
 	 * Returns true when hit Returns false when miss
 	 */
-	public boolean attackedBy(EvercraftCharacter attackingCharacter, int roll) {
-		int rollWithMods = roll + attackingCharacter.getStrengthModifier();
-		if (isHitBy(rollWithMods)) {
-			dealDamageWithRoll(roll);
-			attackingCharacter.addExperience(10);
+	public boolean attack(EvercraftCharacter targetCharacter, int roll) {
+		int rollWithMods = roll + getStrengthModifier();
+		if (targetCharacter.isHitBy(rollWithMods)) {
+			targetCharacter.takeDamageWithRoll(roll);
+			this.addExperience(10);
 			return true;
 		} else {
 			return false;
@@ -49,7 +49,7 @@ public class EvercraftCharacter {
 		return (totalRoll >= armorClass);
 	}
 	
-	private void dealDamageWithRoll(int roll) {
+	private void takeDamageWithRoll(int roll) {
 		if (CRITICAL_ROLL == roll) {
 			currentHitPoints = currentHitPoints - attackDamageOnCrits();
 		} else {
