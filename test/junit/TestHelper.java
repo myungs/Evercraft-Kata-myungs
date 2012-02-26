@@ -13,6 +13,14 @@ public class TestHelper {
 		return new EvercraftCharacter(name);
 	}
 
+	public static EvercraftCharacter combatSimulatorWithExperience(int experience) {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setExperience(experience);
+		myCharacter.attack(enemyCharacter, 10);
+		return myCharacter;
+	}
+
 	public static boolean combatSimulatorRoll(int roll) {
 		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
 		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();

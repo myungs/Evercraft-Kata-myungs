@@ -2,9 +2,10 @@ package core;
 
 public class EvercraftCharacter {
 
-	private static final int MINIMUM_DAMAGE = 1;
 	private static final int BASE_HEALTH = 5;
+	private static final int BASE_HIT_POINTS_PER_LEVEL = 5;
 	private static final int MINIMUM_MAX_HEALTH = 1;
+	private static final int MINIMUM_DAMAGE = 1;
 	private static final int MINIMUM_LEVEL = 1;
 	private static final int CRITICAL_ROLL = 20;
 
@@ -35,7 +36,7 @@ public class EvercraftCharacter {
 	 * Returns true when hit Returns false when miss
 	 */
 	public boolean attack(EvercraftCharacter targetCharacter, int roll) {
-		int rollWithMods = roll + getStrengthModifier();
+		int rollWithMods = roll + getRollBonus();
 		if (targetCharacter.isHitBy(rollWithMods)) {
 			targetCharacter.takeDamageWithRoll(roll);
 			this.addExperience(10);
@@ -57,22 +58,30 @@ public class EvercraftCharacter {
 		}
 	}
 	
-	public int getStrengthModifier() {
-		return ScoreModifiers.getModifier(strength);
-	}
-
 	public int attackDamageOnCrits() {
 		return (2 * attackDamage());
 	}
 	
 	public int attackDamage() {
 		int calculatedDamage = baseDamage
-				+ getStrengthModifier();
+				+ ScoreModifiers.getModifier(strength);
 		if (calculatedDamage < MINIMUM_DAMAGE) {
 			return MINIMUM_DAMAGE;
 		} else {
 			return calculatedDamage;
 		}
+	}
+	
+	public int getRollBonus() {
+		return (getLevel() - 1) + ScoreModifiers.getModifier(strength);
+	}
+
+	private void recalculateMaxHitPoints() {
+		this.maxHitPoints = BASE_HEALTH + ScoreModifiers.getModifier(constitution);
+		int bonusHitPointsPerLevel = (BASE_HIT_POINTS_PER_LEVEL + ScoreModifiers.getModifier(constitution));
+		this.maxHitPoints = maxHitPoints + ((getLevel() - 1) * bonusHitPointsPerLevel);
+		if(this.maxHitPoints < MINIMUM_MAX_HEALTH)
+			this.maxHitPoints = MINIMUM_MAX_HEALTH;
 	}
 
 	public String getName() {
@@ -102,7 +111,7 @@ public class EvercraftCharacter {
 	public void setCurrentHitPoints(int hitPoints) {
 		this.currentHitPoints = hitPoints;
 	}
-	
+
 	public int getMaxHitPoints() {
 		return maxHitPoints;
 	}
@@ -126,12 +135,10 @@ public class EvercraftCharacter {
 	public int getConstitution() {
 		return constitution;
 	}
-
+	
 	public void setConstitution(int constitution) {
-		this.maxHitPoints = BASE_HEALTH + ScoreModifiers.getModifier(constitution);
-		if(this.maxHitPoints < MINIMUM_MAX_HEALTH)
-			this.maxHitPoints = MINIMUM_MAX_HEALTH;
 		this.constitution = constitution;
+		recalculateMaxHitPoints();
 	}
 
 	public int getWisdom() {
@@ -165,7 +172,8 @@ public class EvercraftCharacter {
 	public void setLevel(int level) {
 		this.level = level;
 		if(this.level < MINIMUM_LEVEL)
-			this.level = MINIMUM_LEVEL;
+			this.level = MINIMUM_LEVEL;		
+		recalculateMaxHitPoints();
 	}
 	
 	public int getExperience() {

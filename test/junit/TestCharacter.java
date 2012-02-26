@@ -234,6 +234,8 @@ public class TestCharacter {
 		assertEquals(2, character.attackDamageOnCrits());
 	}
 	
+	
+	//Test Dexterity Bonus modifies armor class
 	@Test
 	public void testDexterity20ModifiesCharacterArmorClass() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
@@ -255,41 +257,44 @@ public class TestCharacter {
 		assertEquals(5, character.getArmorClass());
 	}
 	
+	
+	//Test constitution modifies base hit points
 	@Test
-	public void testConstituion12ModifiesCharacterHitPoints() {
+	public void testConstitution12ModifiesCharacterHitPoints() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setConstitution(12);
 		assertEquals(6, character.getMaxHitPoints());
 	}
 	
 	@Test
-	public void testConstituion20ModifiesCharacterHitPoints() {
+	public void testConstitution20ModifiesCharacterHitPoints() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setConstitution(20);
 		assertEquals(10, character.getMaxHitPoints());
 	}
 	
 	@Test
-	public void testConstituion1NegativelyModifiesCharacterHitPointsMinimumOf1MaxHitPoints() {
+	public void testConstitution1NegativelyModifiesCharacterHitPointsMinimumOf1MaxHitPoints() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setConstitution(1);
 		assertEquals(1, character.getMaxHitPoints());
 	}
 	
 	@Test
-	public void testConstituion3NegativelyModifiesCharacterHitPointsMinimumOf1MaxHitPoints() {
+	public void testConstitution3NegativelyModifiesCharacterHitPointsMinimumOf1MaxHitPoints() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setConstitution(3);
 		assertEquals(1, character.getMaxHitPoints());
 	}
 	
 	@Test
-	public void testConstituion3NegativelyModifiesCharacterHitPoints() {
+	public void testConstitution3NegativelyModifiesCharacterHitPoints() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setConstitution(4);
 		assertEquals(2, character.getMaxHitPoints());
 	}
 
+	//Test for leveling up and experience
 	@Test
 	public void testCharactersCanHaveLevelsDefault1() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
@@ -337,30 +342,133 @@ public class TestCharacter {
 		assertEquals(10, character.getLevel());
 	}
 
+	//Test gaining experience by attacking
 	@Test
 	public void testCharacterGains10XPOnSuccessfullAttack() {
-		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
-		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
-		myCharacter.attack(myCharacter, 10);
+		EvercraftCharacter myCharacter = TestHelper.combatSimulatorWithExperience(0);
 		assertEquals(10, myCharacter.getExperience());
 	}
 
 	@Test
 	public void testCharacterCanLevelUpByAttacking() {
-		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
-		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
-		myCharacter.setExperience(990);
-		myCharacter.attack(myCharacter, 10);
+		EvercraftCharacter myCharacter = TestHelper.combatSimulatorWithExperience(990);
 		assertEquals(2, myCharacter.getLevel());
 	}
 
 	@Test
 	public void testCharacterDoesntAlwaysLevelByAttacking() {
-		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
-		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
-		myCharacter.setExperience(1000);
-		myCharacter.attack(myCharacter, 10);
+		EvercraftCharacter myCharacter = TestHelper.combatSimulatorWithExperience(1000);
 		assertEquals(2, myCharacter.getLevel());
+	}
+
+	//Test character hit point increase with level
+	@Test
+	public void testCharacterHitPointsIncreaseBy5PerLevel() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setLevel(2);
+		assertEquals(10, myCharacter.getMaxHitPoints());
+	}
+
+	@Test
+	public void testCharacterHitPointsIncreaseBy5PerLevel10PointsForLevel3() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setLevel(3);
+		assertEquals(15, myCharacter.getMaxHitPoints());
+	}
+	
+	@Test
+	public void testCharacterHitPointsIncreaseBy5PerLevel45PointsForLevel10() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setLevel(10);
+		assertEquals(50, myCharacter.getMaxHitPoints());
+	}
+	
+	//Test level up works with constitution bonus
+	@Test
+	public void testCharacterHitPointsIncreaseBy5PlusCon12ModifierForLevel2() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setConstitution(12);
+		myCharacter.setLevel(2);
+		assertEquals(6 + 6, myCharacter.getMaxHitPoints());
+	}
+	
+	@Test
+	public void testCharacterHitPointsIncreaseBy5PlusCon20ModifierForLevel2() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setConstitution(20);
+		myCharacter.setLevel(2);
+		assertEquals(10 + 10, myCharacter.getMaxHitPoints());
+	}
+	
+	@Test
+	public void testCharacterHitPointsIncreaseBy5PlusCon1ModifierForLevel2() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setConstitution(1);
+		myCharacter.setLevel(2);
+		assertEquals(1 + 0, myCharacter.getMaxHitPoints());
+	}
+	@Test
+	public void testCharacterHitPointsIncreaseBy5PlusCon12ModifierForLevel3() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setConstitution(12);
+		myCharacter.setLevel(3);
+		assertEquals(6 + 12, myCharacter.getMaxHitPoints());
+	}
+	
+	@Test
+	public void testCharacterHitPointsIncreaseBy5PlusCon20ModifierForLevel3() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setConstitution(20);
+		myCharacter.setLevel(3);
+		assertEquals(10 + 20, myCharacter.getMaxHitPoints());
+	}
+	
+	@Test
+	public void testCharacterHitPointsIncreaseBy5PlusCon1ModifierForLevel3() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setConstitution(1);
+		myCharacter.setLevel(3);
+		assertEquals(1 + 0, myCharacter.getMaxHitPoints());
+	}
+	
+	//Attack Roll Bonus for Level Up
+	@Test
+	public void testCharacterAttackRollBonusIncreasedBy1ForLevel2() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setLevel(2);
+		assertEquals(1, myCharacter.getRollBonus());
+	}
+	
+	@Test
+	public void testCharacterAttackRollBonusIncreasedBy1ForLevel10() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setLevel(10);
+		assertEquals(9, myCharacter.getRollBonus());
+	}
+	
+	//Test Attack Bonus works with Level and Strength Bonus
+	@Test
+	public void testCharacterAttackRollBonusIncreasedLevel2AndStrength12() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setLevel(2);
+		myCharacter.setStrength(12);
+		assertEquals(2, myCharacter.getRollBonus());
+	}
+	
+	@Test
+	public void testCharacterAttackRollBonusIncreasedLevel2AndStrength20() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setLevel(2);
+		myCharacter.setStrength(20);
+		assertEquals(6, myCharacter.getRollBonus());
+	}
+	
+	@Test
+	public void testCharacterAttackRollBonusIncreasedLevel10AndStrength20() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setLevel(10);
+		myCharacter.setStrength(20);
+		assertEquals(14, myCharacter.getRollBonus());
 	}
 	
 }
