@@ -3,46 +3,47 @@ package core;
 public class EvercraftCharacter {
 
 	private static final int MINIMUM_DAMAGE = 1;
-
+	private static final int BASE_HEALTH = 5;
+	private static final int MINIMUM_MAX_HEALTH = 1;
+	private static final int MINIMUM_LEVEL = 1;
 	private static final int CRITICAL_ROLL = 20;
 
 	private String name;
 	private Alignments alignment = Alignments.NEUTRAL;
-	private int baseDamage = 1;
+	private int baseDamage = MINIMUM_DAMAGE;
 	private int armorClass = 10;
-	private int hitPoints = 5;
 	private int strength = 10;
 	private int dexterity = 10;
 	private int constitution = 10;
 	private int wisdom = 10;
 	private int intelligence = 10;
 	private int charisma = 10;
+	private int maxHitPoints = BASE_HEALTH;
+	private int currentHitPoints = maxHitPoints;
+	private int level = 1;
+	private int experience = 0;
 
 	public EvercraftCharacter(String name) {
 		this.name = name;
 	}
 
 	public boolean isDead() {
-		return (hitPoints <= 0); 
+		return (currentHitPoints <= 0); 
 	}
 	
-	//TODO Move roll logic out into combat class
 	/*
 	 * Returns true when hit Returns false when miss
 	 */
 	public boolean attackedBy(EvercraftCharacter attackingCharacter, int roll) {
 		int rollWithMods = roll + attackingCharacter.getStrengthModifier();
-		return attackedBy(rollWithMods);
-	}
-	
-	public boolean attackedBy(int roll) {
-		if (isHitBy(roll)) {
+		if (isHitBy(rollWithMods)) {
 			dealDamageWithRoll(roll);
+			attackingCharacter.addExperience(10);
 			return true;
 		} else {
 			return false;
 		}
-	}
+	}	
 	
 	private boolean isHitBy(int totalRoll) {
 		return (totalRoll >= armorClass);
@@ -50,9 +51,9 @@ public class EvercraftCharacter {
 	
 	private void dealDamageWithRoll(int roll) {
 		if (CRITICAL_ROLL == roll) {
-			hitPoints = hitPoints - attackDamageOnCrits();
+			currentHitPoints = currentHitPoints - attackDamageOnCrits();
 		} else {
-			hitPoints = hitPoints - attackDamage();
+			currentHitPoints = currentHitPoints - attackDamage();
 		}
 	}
 	
@@ -91,15 +92,19 @@ public class EvercraftCharacter {
 	}
 
 	public int getArmorClass() {
-		return armorClass;
+		return armorClass + ScoreModifiers.getModifier(dexterity);
 	}
 
-	public int getHitPoints() {
-		return hitPoints;
+	public int getCurrentHitPoints() {
+		return currentHitPoints;
 	}
 	
-	public void setHitPoints(int hitPoints) {
-		this.hitPoints = hitPoints;
+	public void setCurrentHitPoints(int hitPoints) {
+		this.currentHitPoints = hitPoints;
+	}
+	
+	public int getMaxHitPoints() {
+		return maxHitPoints;
 	}
 
 	public int getStrength() {
@@ -123,6 +128,9 @@ public class EvercraftCharacter {
 	}
 
 	public void setConstitution(int constitution) {
+		this.maxHitPoints = BASE_HEALTH + ScoreModifiers.getModifier(constitution);
+		if(this.maxHitPoints < MINIMUM_MAX_HEALTH)
+			this.maxHitPoints = MINIMUM_MAX_HEALTH;
 		this.constitution = constitution;
 	}
 
@@ -148,6 +156,29 @@ public class EvercraftCharacter {
 
 	public void setCharisma(int charisma) {
 		this.charisma = charisma;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+		if(this.level < MINIMUM_LEVEL)
+			this.level = MINIMUM_LEVEL;
+	}
+	
+	public int getExperience() {
+		return experience;
+	}
+
+	public void setExperience(int experience) {
+		this.experience = experience;
+		setLevel((experience/1000) + 1);
+	}
+
+	public void addExperience(int experience) {
+		setExperience(getExperience() + experience);
 	}
 
 }

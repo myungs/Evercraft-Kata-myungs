@@ -150,16 +150,18 @@ public class TestCombat {
 	@Test
 	public void testCharacterTakes1DamageWhenHit() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
-		character.attackedBy(10);
+		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
+		character.attackedBy(enemyCharacter, 10);
 		int expectedHitPoints =  4;
-		assertEquals(expectedHitPoints, character.getHitPoints());
+		assertEquals(expectedHitPoints, character.getCurrentHitPoints());
 	}
 	
 	@Test
 	public void testCharacterTakesDoubleDamageWhenHitWithCriticalRollOf20() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
-		character.attackedBy(20);
+		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
+		character.attackedBy(enemyCharacter, 20);
 		int expectedHitPoints =  3;
-		assertEquals(expectedHitPoints, character.getHitPoints());
+		assertEquals(expectedHitPoints, character.getCurrentHitPoints());
 	}
 }

@@ -1,9 +1,5 @@
 package junit;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-
 import core.EvercraftCharacter;
 
 public class TestHelper {

@@ -65,7 +65,7 @@ public class TestCharacter {
 	@Test
 	public void testCharacterDefaultHitPoints() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
-		assertEquals(5, character.getHitPoints());
+		assertEquals(5, character.getCurrentHitPoints());
 	}
 	
 	
@@ -73,21 +73,21 @@ public class TestCharacter {
 	@Test
 	public void testCharacterIsDeadWhenHitPointsIsZero() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
-		character.setHitPoints(0);
+		character.setCurrentHitPoints(0);
 		assertTrue(character.isDead());
 	}
 	
 	@Test
 	public void testCharacterIsDeadWhenHitPointsIsLessThanZero() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
-		character.setHitPoints(-1);
+		character.setCurrentHitPoints(-1);
 		assertTrue(character.isDead());
 	}
 	
 	@Test
 	public void testCharacterIsNotDeadWhenHitPointsIsGreaterThanZero() {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
-		character.setHitPoints(1);
+		character.setCurrentHitPoints(1);
 		assertFalse(character.isDead());
 	}
 	
@@ -232,6 +232,135 @@ public class TestCharacter {
 		EvercraftCharacter character = TestHelper.createDefaultCharacter();
 		character.setStrength(1);
 		assertEquals(2, character.attackDamageOnCrits());
+	}
+	
+	@Test
+	public void testDexterity20ModifiesCharacterArmorClass() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		character.setDexterity(20);
+		assertEquals(15, character.getArmorClass());
+	}
+	
+	@Test
+	public void testDexterity12ModifiesCharacterArmorClass() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		character.setDexterity(12);
+		assertEquals(11, character.getArmorClass());
+	}
+	
+	@Test
+	public void testDexterity1ModifiesCharacterArmorClassNegatively() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		character.setDexterity(1);
+		assertEquals(5, character.getArmorClass());
+	}
+	
+	@Test
+	public void testConstituion12ModifiesCharacterHitPoints() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		character.setConstitution(12);
+		assertEquals(6, character.getMaxHitPoints());
+	}
+	
+	@Test
+	public void testConstituion20ModifiesCharacterHitPoints() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		character.setConstitution(20);
+		assertEquals(10, character.getMaxHitPoints());
+	}
+	
+	@Test
+	public void testConstituion1NegativelyModifiesCharacterHitPointsMinimumOf1MaxHitPoints() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		character.setConstitution(1);
+		assertEquals(1, character.getMaxHitPoints());
+	}
+	
+	@Test
+	public void testConstituion3NegativelyModifiesCharacterHitPointsMinimumOf1MaxHitPoints() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		character.setConstitution(3);
+		assertEquals(1, character.getMaxHitPoints());
+	}
+	
+	@Test
+	public void testConstituion3NegativelyModifiesCharacterHitPoints() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		character.setConstitution(4);
+		assertEquals(2, character.getMaxHitPoints());
+	}
+
+	@Test
+	public void testCharactersCanHaveLevelsDefault1() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		assertEquals(1, character.getLevel());
+	}
+
+	@Test
+	public void testCharactersCanHaveExperienceDefaultZero() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		assertEquals(0, character.getExperience());
+	}
+
+	@Test
+	public void testCharactersIsLevel1After999XP() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		character.setExperience(999);
+		assertEquals(1, character.getLevel());
+	}
+
+	@Test
+	public void testCharactersIsLevel2After1000XP() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		character.setExperience(1000);
+		assertEquals(2, character.getLevel());
+	}
+
+	@Test
+	public void testCharactersIsLevel2After1999XP() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		character.setExperience(1999);
+		assertEquals(2, character.getLevel());
+	}
+
+	@Test
+	public void testCharactersIsLevel3After2000XP() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		character.setExperience(2000);
+		assertEquals(3, character.getLevel());
+	}
+
+	@Test
+	public void testCharactersIsLevel10After9000XP() {
+		EvercraftCharacter character = TestHelper.createDefaultCharacter();
+		character.setExperience(9000);
+		assertEquals(10, character.getLevel());
+	}
+
+	@Test
+	public void testCharacterGains10XPOnSuccessfullAttack() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
+		enemyCharacter.attackedBy(myCharacter, 10);
+		assertEquals(10, myCharacter.getExperience());
+	}
+
+	@Test
+	public void testCharacterCanLevelUpByAttacking() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setExperience(990);
+		enemyCharacter.attackedBy(myCharacter, 10);
+		assertEquals(2, myCharacter.getLevel());
+	}
+
+	@Test
+	public void testCharacterDoesntAlwaysLevelByAttacking() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		EvercraftCharacter enemyCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setExperience(1000);
+		enemyCharacter.attackedBy(myCharacter, 10);
+		assertEquals(2, myCharacter.getLevel());
 	}
 	
 }
