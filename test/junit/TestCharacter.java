@@ -471,4 +471,28 @@ public class TestCharacter {
 		assertEquals(14, myCharacter.getRollBonus());
 	}
 	
+	@Test
+	public void testCharacterAttackRollBonusStillDecreasedByLowStrength1EvenAtLevel2() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setLevel(2);
+		myCharacter.setStrength(1);
+		assertEquals(-4, myCharacter.getRollBonus());
+	}
+	
+	@Test
+	public void testCharacterAttackRollBonusStillDecreasedByLowStrength9EvenAtLevel2() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setLevel(2);
+		myCharacter.setStrength(9);
+		assertEquals(0, myCharacter.getRollBonus());
+	}
+	
+	@Test
+	public void testCharacterAttackRollBonusStillDecreasedByLowStrength9EvenAtLevel10() {
+		EvercraftCharacter myCharacter = TestHelper.createDefaultCharacter();
+		myCharacter.setLevel(10);
+		myCharacter.setStrength(1);
+		assertEquals(4, myCharacter.getRollBonus());
+	}
+	
 }
